@@ -1,16 +1,29 @@
-﻿{
-  "name": "learning-path-js-ts",
-  "private": true,
+{
+  "name": "ia",
   "version": "1.0.0",
-  "workspaces": [
-    "notes",
-    "js-basics",
-    "ts-basics",
-    "algorithms",
-    "projects/*"
-  ],
+  "main": "index.js",
   "scripts": {
-    "build": "echo \"build all workspaces\"",
-    "dev": "echo \"run a specific workspace with npm run dev -w <workspace>\""
-  }
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Kiwada/learning-path-js-ts.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Kiwada/learning-path-js-ts/issues"
+  },
+  "homepage": "https://github.com/Kiwada/learning-path-js-ts#readme",
+  "dependencies": {
+    "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.9.1",
+    "tsx": "^4.20.6",
+    "typescript": "^5.9.3"
+  },
+  "description": ""
 }
