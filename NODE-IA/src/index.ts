@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import OpenAI from 'openai';
-import { Completions } from 'openai/resources';
+
 dotenv.config()
 
 
@@ -12,17 +12,33 @@ const client = new OpenAI({
 });
 console.log('API Key', process.env.OPEN_AI_API_KEY);
 
-
-client.chat.completions.create({
+async function generateText() {
+    const completion = await client.chat.completions.create({
     model :'gpt-4o-mini',
+    max_completion_tokens: 100,
+    temperature: 1,
     messages: [
         {
             role : "user",
             content: "White a one-sentence bedtime story about god"
         },
+
+        {
+            role : "developer",
+            content: "About GOD"
+        },
+        {
+            role : "assistant",
+            content : "GOD"
+        }
     ],
 
 })
-    .then((completion) => {
-    console.log(completion.choices[0].message.content);
-  });
+
+console.log(completion.choices[0].message.content)
+
+
+
+}
+
+ 
