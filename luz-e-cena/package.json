@@ -10,6 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "class": "^0.1.4",
+    "classnames": "^2.5.1",
+    "names": "^0.0.2",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
