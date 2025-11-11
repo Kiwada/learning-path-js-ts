@@ -1,12 +1,11 @@
-import React from 'react'
-import styles from "Header.module.css";
+import styles from  '../Header.module.css'
 
-const Headerlist = ({children,
+const HeaderList = ({children,
 
 }:React.LiHTMLAttributes<HTMLElement>) => {
   return (<li className={styles.cabecalho}>{children}</li>
   )
 }
 
-export default Headerlist
+export default HeaderList
 

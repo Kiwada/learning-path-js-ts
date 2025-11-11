@@ -1,4 +1,3 @@
-import React from 'react'
 import styles from "./SelectorGrup.module.css";
 
 interface SelectorGrup extends React.SelectHTMLAttributes<HTMLElement> {
