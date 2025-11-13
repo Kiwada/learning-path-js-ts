@@ -5,7 +5,7 @@ function App() {
     return (
         <>
             <Header />
-             <Banner src ="./Banner.png"  alt="Welcome Banner"/>;
+             <Banner src ="./banner.png"  alt="Welcome Banner"/>;
         </>
     );
 }
