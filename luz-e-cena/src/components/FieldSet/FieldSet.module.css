@@ -1,0 +1,24 @@
+.inputWrapper {
+    width: 40vw;
+    height: 3rem;
+    padding: var(--padding-xs) var(--padding-s);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.primary {
+    border: 3px solid var(--cinza-escuro);
+    background-color: var(--cor-de-fundo-newsletter);
+}
+
+.secondary {
+    border: 3px solid var(--border-color);
+    background-color: none;
+}
+
+.inputWrapper::placeholder {
+    color: var(--preto);
+    font-family: var(--fonte-texto);
+    font-size: var(--font-size-m);
+}
