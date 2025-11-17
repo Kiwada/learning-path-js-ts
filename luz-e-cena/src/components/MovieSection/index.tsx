@@ -93,9 +93,9 @@ const MovieSection = () => {
     return (
         <main>
             <section className={styles.container}>
-                <FieldSet variant='secondary'>
-                    <InputText placeholder='Buscar Filmes...' />
-                    <Button variant='icon'>
+                <FieldSet variant="secondary">
+                    <InputText placeholder="Buscar filmes..." />
+                    <Button variant="icon">
                         <FaSearch />
                     </Button>
                 </FieldSet>
@@ -103,7 +103,7 @@ const MovieSection = () => {
                 <MovieList movies={movies} />
             </section>
         </main>
-    )
-}
+    );
+};
 
-export default MovieSection
+export default MovieSection;
