@@ -1,30 +1,16 @@
-import { useEffect, useState } from 'react'
+import useFetchMovie from '../../Hooks/useFetchMovie.ts'
 import styles from './MovieSection.module.css'
 import InputText from '../InputText'
 import { FaSearch } from 'react-icons/fa'
 import FieldSet from '../FieldSet'
 import Button from '../Button'
-import { getMovies } from '../../api/index.tsx'
 import MovieList from '../MovieList/Index.tsx'
-import { type Movie } from '../../Types/Index.tsx';
 
 
 
 const MovieSection = () => {
-    const [movies, setMovies] = useState<Movie[]>([]);
+    const { movies, isLoading, error } = useFetchMovie();
 
-    const fetchMovies = async () => {
-        try {
-            const movies = await getMovies();
-            setMovies(movies);
-
-        } catch (error) {
-            console.error("Erro ao buscar filmes:", error);
-        }
-    }
-    useEffect(() => {
-        fetchMovies();
-    }, []);
     return (
         <main>
             <section className={styles.container}>
