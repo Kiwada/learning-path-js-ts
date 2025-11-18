@@ -23,7 +23,7 @@ const useFetchMovie = () => {
     };
     useEffect(() => {
         fetchMovies();
-    });
+    }, []);
 
     return { movies, isLoading, error };
 };
