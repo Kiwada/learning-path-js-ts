@@ -1,0 +1,39 @@
+.newsletter {
+  background-color: var(--azul-claro);
+  padding: var(--padding-xxl) 0;
+  /* Opcional: garante que tudo dentro da newsletter tente se centralizar se for texto */
+  text-align: center; 
+}
+
+.form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--gap-s);
+  /* Melhoria: Permite que o formulário quebre linha em celulares (responsivo) */
+  flex-wrap: wrap; 
+}
+
+.titulo {
+  color: var(--preto);
+  font-family: var(--fonte-titulo);
+  font-size: var(--font-size-l);
+  
+  /* --- CORREÇÃO AQUI --- */
+  text-align: center; 
+  /* --------------------- */
+  
+  margin-bottom: var(--margin-l);
+  
+  /* Garante que o título ocupe a largura total para poder centralizar */
+  width: 100%; 
+  display: block;
+}
+
+.error {
+  color: #e63946;
+  font-size: var(--font-size-s);
+  margin-top: var(--margin-s);
+  /* Garante que a mensagem de erro também fique centralizada */
+  text-align: center;
+}

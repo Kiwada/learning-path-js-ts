@@ -9,7 +9,7 @@ type ButtonProps = {
 
 const Button = ({children , variant = 'default', ...rest } : ButtonProps) => {
     const classMap = {
-        default: styles.defalt,
+        default: styles.default,
         icon: styles.icon,
     };
 
