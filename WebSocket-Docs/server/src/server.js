@@ -1,16 +1,67 @@
 import express from 'express';
 import url from 'url';
 import path from 'path'; 
+import http from 'http';
+import { Server } from 'socket.io';
 
 const app = express();
 const porta = process.env.PORT || 3000; 
 const caminhoAtual = url.fileURLToPath(import.meta.url);
-const diretorioAtual = path.dirname(caminhoAtual);
+const diretorioPublico = path.join(caminhoAtual, "../..", "public");
 
-app.get('/', (req, res) => {
-    res.send(`Servidor rodando! O diretório atual é: ${diretorioAtual}`);
+app.use(express.static(diretorioPublico));
+
+const httpServer = http.createServer(app);
+const io = new Server(httpServer, {
+    cors: {
+        origin: "http://localhost:5173", // URL do Vite
+        methods: ["GET", "POST"]
+    }
 });
 
-app.listen(porta, () => {
-    console.log(`Servidor rodando na porta ${porta}`);
+// Dados em memória para exemplo (idealmente viriam de um DB)
+let documentos = [
+    { name: "JavaScript", content: "Texto sobre JS..." },
+    { name: "Node", content: "Texto sobre Node..." },
+    { name: "Socket.io", content: "Texto sobre Sockets..." }
+];
+
+io.on("connection", (socket) => {
+    console.log("Um cliente se conectou ID:", socket.id);
+
+    // Envia a lista inicial de documentos para quem conectou
+    socket.emit("documentos_interface", documentos);
+
+    socket.on("selecionar_documento", (nomeDocumento, devolverTexto) => {
+        const documento = documentos.find((doc) => doc.name === nomeDocumento);
+        if (documento) {
+            socket.join(nomeDocumento);
+            devolverTexto(documento.content);
+        }
+    });
+
+    socket.on("texto_editor", ({ texto, nomeDocumento }) => {
+        const documento = documentos.find((doc) => doc.name === nomeDocumento);
+        if (documento) {
+            documento.content = texto;
+            // socket.to(nomeDocumento).emit("texto_editor_clientes", texto); 
+        }
+    });
+
+    socket.on("adicionar_documento", (nomeDocumento) => {
+        const docExiste = documentos.find((doc) => doc.name === nomeDocumento);
+        if (!docExiste) {
+            documentos.push({ name: nomeDocumento, content: "" });
+            io.emit("documentos_interface", documentos);
+        }
+    });
+
+    socket.on("excluir_documento", (nomeDocumento) => {
+        documentos = documentos.filter((doc) => doc.name !== nomeDocumento);
+        io.emit("documentos_interface", documentos);
+    });
+});
+
+httpServer.listen(porta, () => {
+    console.log(`Servidor escutando na porta ${porta}`);
 });
