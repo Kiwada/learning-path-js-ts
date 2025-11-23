@@ -14,12 +14,13 @@ app.use(express.static(diretorioPublico));
 const httpServer = http.createServer(app);
 const io = new Server(httpServer, {
     cors: {
-        origin: "http://localhost:5173", // URL do Vite
+        origin: "http://localhost:5173", 
         methods: ["GET", "POST"]
     }
+
 });
 
-// Dados em memória para exemplo (idealmente viriam de um DB)
+
 let documentos = [
     { name: "JavaScript", content: "Texto sobre JS..." },
     { name: "Node", content: "Texto sobre Node..." },
@@ -29,7 +30,6 @@ let documentos = [
 io.on("connection", (socket) => {
     console.log("Um cliente se conectou ID:", socket.id);
 
-    // Envia a lista inicial de documentos para quem conectou
     socket.emit("documentos_interface", documentos);
 
     socket.on("selecionar_documento", (nomeDocumento, devolverTexto) => {
@@ -40,11 +40,16 @@ io.on("connection", (socket) => {
         }
     });
 
-    socket.on("texto_editor", ({ texto, nomeDocumento }) => {
-        const documento = documentos.find((doc) => doc.name === nomeDocumento);
-        if (documento) {
-            documento.content = texto;
-            // socket.to(nomeDocumento).emit("texto_editor_clientes", texto); 
+    socket.on("texto_editor", (dados) => {
+        console.log(dados);
+        
+        // Verifica se é o objeto esperado para atualização do documento
+        if (typeof dados === 'object' && dados.nomeDocumento) {
+            const { texto, nomeDocumento } = dados;
+            const documento = documentos.find((doc) => doc.name === nomeDocumento);
+            if (documento) {
+                documento.content = texto;
+            }
         }
     });
 
