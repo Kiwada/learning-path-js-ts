@@ -1,5 +1,6 @@
 import io from "./servidor.js";
-import { documentosCollection } from "./dbConnect.js";
+import { encontrarDocumento } from "./documentosDB.js";
+import { atualizarDocumento } from "./documentosDB.js"; 
 
 io.on("connection", (socket) => {
   console.log("Um cliente se conectou! ID:", socket.id);
@@ -8,27 +9,20 @@ io.on("connection", (socket) => {
     socket.join(nomeDocumento);
 
     const documento = await encontrarDocumento(nomeDocumento);
+    
 
     if (documento) {
       devolverTexto(documento.texto);
     }
   });
 
-  socket.on("texto_editor", ({ texto, nomeDocumento }) => {
-    const documento = encontrarDocumento(nomeDocumento);
+  socket.on("texto_editor", async ({ texto, nomeDocumento }) => {
+    const atualizacao = await atualizarDocumento(nomeDocumento, texto);
 
-    if (documento) {
-      documento.texto = texto;
-
+    if (atualizacao.modifiedCount) {
       socket.to(nomeDocumento).emit("texto_editor_clientes", texto);
     }
   });
 });
 
-function encontrarDocumento(nome) {
-  const documento = documentosCollection.findOne({ nome 
-    
-  });
 
-  return documento;
-}

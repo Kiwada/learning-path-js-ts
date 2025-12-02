@@ -16,4 +16,4 @@ try {
     console.error("Erro ao conectar ao MongoDB:", error);
 }
 
-export {documentosCollection}
+export {documentosCollection};
