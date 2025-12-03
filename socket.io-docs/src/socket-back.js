@@ -3,7 +3,12 @@ import { encontrarDocumento } from "./documentosDB.js";
 import { atualizarDocumento } from "./documentosDB.js"; 
 
 io.on("connection", (socket) => {
-  console.log("Um cliente se conectou! ID:", socket.id);
+ 
+  socket.on("obterdocumentos", async (devolverDocumentos) => {
+    const documentos = await obterDocumentos();
+    
+    devolverDocumentos(documentos);
+  })
 
   socket.on("selecionar_documento",async (nomeDocumento, devolverTexto) => {
     socket.join(nomeDocumento);
