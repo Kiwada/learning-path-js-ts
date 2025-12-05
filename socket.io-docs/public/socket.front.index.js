@@ -1,6 +1,7 @@
-import { inserirLinkDocumento } from "./socket.front.index.js";
+import { inserirLinkDocumento } from "./index.js";
 
 const socket = io();
+export { socket };
 
 socket.emit("obterdocumentos" , (documentos) => {   
     documentos.forEach(documento => {
