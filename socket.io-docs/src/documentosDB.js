@@ -14,10 +14,18 @@ function encontrarDocumento(nome) {
   return documento;
 }
 
+function adicionarDocumento(nome) {
+  const resultado = documentosCollection.insertOne({ 
+    nome, 
+    texto: "" });
+
+  return resultado;
+}
+
 function atualizarDocumento(nome, texto) {
   const atualizacao = documentosCollection.updateOne({ nome }, { $set: { texto } });
 
   return atualizacao;
 }
 
-export {obterDocumentos, encontrarDocumento, atualizarDocumento};
+export {obterDocumentos, encontrarDocumento, atualizarDocumento, adicionarDocumento};

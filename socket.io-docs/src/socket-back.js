@@ -10,6 +10,10 @@ io.on("connection", (socket) => {
     devolverDocumentos(documentos);
   })
 
+  socket.on("adicionar_documento", async (nome) => {
+    const resultado =  await adicionarDocumento(nome);
+  })
+
   socket.on("selecionar_documento",async (nomeDocumento, devolverTexto) => {
     socket.join(nomeDocumento);
 

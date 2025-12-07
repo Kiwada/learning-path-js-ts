@@ -1,4 +1,4 @@
-import { socket } from "./socket.front.index.js";
+import { emitirAdicionarDocumento } from "./socket.front.index.js"; 
 
 
 
@@ -8,8 +8,7 @@ const inputDocumento = document.getElementById("inputDocumento");
 
 form.addEventListener("submit", (event) => {
     event.preventDefault();
-    const nomeDocumento = inputDocumento.value;
-    socket.emit("adicionar_documento", nomeDocumento);
+    emitirAdicionarDocumento(inputDocumento.value);
     inputDocumento.value = "";
 });
 
