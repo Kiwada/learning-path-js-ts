@@ -16,4 +16,15 @@ function emitirAdicionarDocumento(nome) {
 socket.on("adicionar_documentos_interface", (nome) => {
     inserirLinkDocumento(nome);
 })
+
+
+socket.on("documento_existente", (nome) => {
+    alert(`documento ${nome} ja existe`);
+})
+
+socket.on("excluir_documento_sucesso", (nome) => {
+
+    removerLinkDocumento(nome);
+    
+})
 export { emitirAdicionarDocumento };
