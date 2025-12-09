@@ -1,5 +1,6 @@
 import { atualizaTextoEditor } from "./documento.js";
 
+
 const socket = io();
 
 function selecionarDocumento(nome) {
