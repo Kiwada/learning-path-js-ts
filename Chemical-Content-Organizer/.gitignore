@@ -1,0 +1,8 @@
+# Ignora arquivos Word
+*.docx
+*.doc
+*.pdf
+
+# Ignora dependências do Node (sempre bom prevenir)
+node_modules/
+.DS_Store
