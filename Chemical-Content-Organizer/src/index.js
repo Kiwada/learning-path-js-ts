@@ -3,93 +3,93 @@ const path = require('path');
 const glob = require('glob');
 const mammoth = require('mammoth');
 
+// IMPORTA AS REGRAS DO ARQUIVO EXTERNO
+const CURRICULO = require('./curriculo');
 
-const RAIZ_DO_PROJETO = path.join(__dirname, '..'); 
-const DIRETORIO_DESTINO = path.join(RAIZ_DO_PROJETO, 'ORGANIZADOS', 'Frente 1');
+const RAIZ_DO_PROJETO = path.join(__dirname, '..');
+const PASTA_DESTINO_BASE = path.join(RAIZ_DO_PROJETO, 'NOVA_ESTRUTURA');
 
-
-const TERMOS_ALVO = [
-    "reacoes quimicas", "aspectos qualitativos", "aspectos quantitativos",
-    "transformacoes quimicas", "balanceamento", "estequiometria",
-    "gases", "teoria cinetica", "leis dos gases", "equacao de clapeyron",
-    "leis de dalton", "amagat e graham"
-];
-
-
+// Função auxiliar para limpar texto (tira acentos e põe minúsculo)
 const normalizar = (texto) => texto.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 
+// Lê o Word e devolve o texto
 async function lerConteudoWord(caminhoArquivo) {
     try {
         const resultado = await mammoth.extractRawText({ path: caminhoArquivo });
-        return normalizar(resultado.value); 
+        return normalizar(resultado.value);
     } catch (erro) {
         return "";
     }
 }
 
+// A CEREJA DO BOLO: Decide qual a Frente baseada no score
+// Ele conta quantas palavras-chave de cada frente aparecem no texto.
+// Quem tiver mais pontos, ganha o arquivo.
+function classificarFrente(conteudoTexto) {
+    let melhorFrente = null;
+    let maiorPontuacao = 0;
 
-const filtroPastaPermissivo = (caminhoArquivo) => {
-    const texto = normalizar(caminhoArquivo);
- 
-    const temMateria = /quimica|natureza/.test(texto);
-    const temIndicador1 = /1|i\b|um|01/.test(texto); 
-    const ehFrente2 = /frente\s*2|modulo\s*0?2|quimica\s*2|quimica\s*ii/.test(texto);
-
-    return temMateria && temIndicador1 && !ehFrente2;
-};
-
-
-async function executar() {
-    console.log(`📍 Raiz do projeto identificada: ${RAIZ_DO_PROJETO}`);
-    console.log("🔍 Iniciando busca de arquivos...");
-
-
-    const arquivos = glob.sync('**/*.docx', { 
-        cwd: RAIZ_DO_PROJETO, 
-        absolute: true,
-        ignore: ['**/node_modules/**', '**/src/**', '**/ORGANIZADOS/**'] 
-    });
-
-    console.log(`📂 Total de arquivos .docx encontrados na raiz: ${arquivos.length}`);
-
-    let analisados = 0;
-    let movidos = 0;
-
-    for (const arquivo of arquivos) {
+    // Loop pelas frentes (Frente 1, Frente 2, etc.)
+    for (const [nomeFrente, palavrasChave] of Object.entries(CURRICULO)) {
+        let pontos = 0;
         
-        
-        if (!filtroPastaPermissivo(arquivo)) {
-            continue; 
-        }
+        // Verifica quantas palavras-chave dessa frente estão no texto
+        palavrasChave.forEach(termo => {
+            if (conteudoTexto.includes(termo)) {
+                pontos++;
+            }
+        });
 
-        process.stdout.write(`📖 Lendo: ${path.basename(arquivo)}... `);
-        analisados++;
-
-        const conteudoTexto = await lerConteudoWord(arquivo);
-        
-       
-        const encontrouTermo = TERMOS_ALVO.find(termo => conteudoTexto.includes(termo));
-
-        if (encontrouTermo) {
-            const nomeArquivo = path.basename(arquivo);
-            const caminhoFinal = path.join(DIRETORIO_DESTINO, nomeArquivo);
-
-            await fs.ensureDir(DIRETORIO_DESTINO);
-            await fs.copy(arquivo, caminhoFinal);
-            
-            console.log(`✅ MATCH! (${encontrouTermo})`);
-            movidos++;
-        } else {
-            console.log(`❌`);
+        // Se essa frente pontuou mais que a anterior, ela assume a liderança
+        if (pontos > maiorPontuacao) {
+            maiorPontuacao = pontos;
+            melhorFrente = nomeFrente;
         }
     }
 
-    console.log("---------------------------------------------------");
-    console.log(`📊 Relatório Final:`);
-    console.log(`   - Arquivos encontrados no total: ${arquivos.length}`);
-    console.log(`   - Arquivos que passaram no filtro de pasta: ${analisados}`);
-    console.log(`   - Arquivos movidos (conteúdo confirmado): ${movidos}`);
-    console.log(`   - Pasta de destino: ${DIRETORIO_DESTINO}`);
+    // Só retorna se tiver encontrado pelo menos 1 palavra-chave relevante
+    return melhorFrente;
+}
+
+async function executar() {
+    console.log(`📍 Raiz do projeto: ${RAIZ_DO_PROJETO}`);
+    console.log("🔍 Iniciando classificação inteligente...");
+
+    // Busca todos os .docx (ignora node_modules e a pasta de destino)
+    const arquivos = glob.sync('**/*.docx', { 
+        cwd: RAIZ_DO_PROJETO, 
+        absolute: true,
+        ignore: ['**/node_modules/**', '**/src/**', '**/NOVA_ESTRUTURA/**'] 
+    });
+
+    console.log(`📂 Total de arquivos para analisar: ${arquivos.length}`);
+    let movidos = 0;
+
+    for (const arquivo of arquivos) {
+        // Log visual para saber que não travou
+        process.stdout.write(`📖 Analisando: ${path.basename(arquivo)}... `);
+
+        const texto = await lerConteudoWord(arquivo);
+        
+        // Chama a função de inteligência
+        const frenteDetectada = classificarFrente(texto);
+
+        if (frenteDetectada) {
+            const pastaFinal = path.join(PASTA_DESTINO_BASE, frenteDetectada);
+            const caminhoFinal = path.join(pastaFinal, path.basename(arquivo));
+
+            await fs.ensureDir(pastaFinal);
+            await fs.copy(arquivo, caminhoFinal);
+
+            console.log(`✅ Vai para [${frenteDetectada}]`);
+            movidos++;
+        } else {
+            console.log(`❌ (Sem conteúdo relevante detectado)`);
+        }
+    }
+
+    console.log("-".repeat(50));
+    console.log(`🚀 Concluído! ${movidos} arquivos organizados em '${PASTA_DESTINO_BASE}'`);
 }
 
 executar();

@@ -1,37 +1,38 @@
 # Chemical Content Organizer
 
-Este projeto é uma ferramenta de automação desenvolvida em Node.js para organizar arquivos de conteúdo educacional (formato `.docx`), focando especificamente em materiais de **Química / Natureza - Frente 1**.
+Este projeto é uma ferramenta de automação desenvolvida em Node.js para organizar arquivos de conteúdo educacional (formato `.docx`) em **4 Frentes de Química**, utilizando análise semântica de conteúdo.
 
 ## 🚀 Funcionalidades
 
-O script realiza uma varredura recursiva no diretório raiz do projeto e executa as seguintes etapas para cada arquivo `.docx` encontrado:
+O script realiza uma varredura recursiva no diretório raiz do projeto e classifica inteligentemente cada arquivo:
 
-1.  **Filtragem por Nome/Caminho**:
-    *   Verifica se o caminho do arquivo contém palavras-chave como "quimica" ou "natureza".
-    *   Confirma se pertence ao Módulo/Frente 1 (procurando por "1", "01", "I", "um").
-    *   Exclui explicitamente arquivos da "Frente 2".
+1.  **Varredura Global**:
+    *   Encontra todos os arquivos `.docx` no projeto (ignorando `node_modules` e pastas do sistema).
 
-2.  **Análise de Conteúdo**:
-    *   Utiliza a biblioteca `mammoth` para ler o texto bruto dos arquivos Word.
-    *   Normaliza o texto (remove acentos, caixa baixa) para facilitar a comparação.
+2.  **Análise de Conteúdo e Scoring**:
+    *   Utiliza a biblioteca `mammoth` para extrair o texto dos arquivos.
+    *   **Classificação Inteligente**: Compara o texto do arquivo contra um banco de palavras-chave definido em `src/curriculo.js`.
+    *   Calcula uma pontuação para cada Frente (1, 2, 3 e 4) baseada na ocorrência de termos. A frente com maior pontuação vence.
 
-3.  **Classificação Semântica**:
-    *   Busca por termos técnicos específicos no conteúdo do arquivo, tais como:
-        *   Reações químicas
-        *   Aspectos qualitativos/quantitativos
-        *   Estequiometria
-        *   Gases (leis, teoria cinética)
-        *   Entre outros.
+3.  **Organização Automática e Dinâmica**:
+    *   Arquivos classificados são copiados para uma nova estrutura de pastas: `NOVA_ESTRUTURA/<Nome da Frente>`.
+    *   Se nenhum termo relevante for encontrado, o arquivo é ignorado, evitando falsos positivos.
 
-4.  **Organização Automática**:
-    *   Caso o arquivo atenda aos critérios e contenha os termos alvo, ele é **copiado** para a pasta de destino: `ORGANIZADOS/Frente 1`.
+## 📚 Currículo Suportado
+
+As regras de classificação são modulares e estão em `src/curriculo.js`. Atualmente suporta:
+
+*   **Frente 1**: Química Geral (Estequiometria, Gases, Transformações).
+*   **Frente 2**: Atomística e Físico-Química (Estrutura Atômica, Ligações, Soluções).
+*   **Frente 3**: Química Orgânica (Cadeias, Funções Orgânicas, Polímeros).
+*   **Frente 4**: Físico-Química Avançada (Termoquímica, Cinética, Eletroquímica).
 
 ## 🛠️ Tecnologias Utilizadas
 
 *   **Node.js**: Ambiente de execução.
-*   **fs-extra**: Manipulação aprimorada do sistema de arquivos (cópia segura, criação de diretórios).
-*   **glob**: Busca de arquivos utilizando padrões glob (`**/*.docx`).
-*   **mammoth**: Conversão e extração de texto de arquivos .docx.
+*   **fs-extra**: Manipulação de arquivos.
+*   **glob**: Busca de arquivos.
+*   **mammoth**: Leitura de arquivos `.docx`.
 
 ## 📦 Como Usar
 
@@ -46,11 +47,9 @@ O script realiza uma varredura recursiva no diretório raiz do projeto e executa
     ```
 
 3.  **Verifique os resultados**:
-    *   O console exibirá o progresso da análise arquivo por arquivo.
-    *   Ao final, verifique a pasta `ORGANIZADOS/Frente 1` na raiz do projeto.
+    *   Acompanhe o log no terminal (`📖 Analisando: ... ✅ Vai para [Frente X]`).
+    *   Ao final, confira a pasta `NOVA_ESTRUTURA` criada na raiz.
 
-## ⚙️ Configuração
+## ⚙️ Personalização
 
-As configurações principais (termos de busca, pastas ignoradas) estão definidas diretamente no topo do arquivo `src/index.js`. Você pode personalizar:
-*   `TERMOS_ALVO`: Lista de palavras-chave para busca no conteúdo.
-*   `filtroPastaPermissivo`: Lógica para filtrar quais pastas/arquivos devem ser analisados.
+Para ajustar os critérios de classificação, edite o arquivo `src/curriculo.js`. Basta adicionar ou remover termos das listas de cada frente.
