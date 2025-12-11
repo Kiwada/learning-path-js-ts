@@ -6,3 +6,8 @@
 # Ignora dependências do Node (sempre bom prevenir)
 node_modules/
 .DS_Store
+
+# Pastas de Conteúdo e Saída
+Natureza Mod 01 /
+NOVA_ESTRUTURA/
+NOVA_ESTRUTURA.zip
