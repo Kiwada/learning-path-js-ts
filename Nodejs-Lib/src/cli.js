@@ -4,32 +4,33 @@ import trataErros from './erros/funcoesErro.js';
 import { contaPalavras } from './index.js';
 import { montaSaidaArquivo } from './helpers.js';
 import { Command } from 'commander';
+import chalk from 'chalk';  
 
 const program = new Command();
+
 program
-     .version('0.0.1')
-     .option('-t,--texto <string>', 'texto a ser processado')
-     .option('-d, --destino <string>', 'arquivo de saida')
-     .action((options) => {
-       const {texto , destino } = options;
+  .version('0.0.1')
+  .option('-t, --texto <string>', 'caminho do texto a ser processado')
+  .option('-d, --destino <string>', 'caminho da pasta onde salvar o arquivo de resultados')
+  .action((options) => {
+    const { texto, destino } = options;
 
-       if(!texto || !destino) {
-         console.error('por favor, forneça um texto e um arquivo de saida');
-         program.help();
-         return;
-       }
+    if (!texto || !destino) {
+      console.error(chalk.red('erro: favor inserir caminho de origem e destino'))
+      program.help();
+      return;
+    }
 
-       const caminhoTexto = path.resolve(texto);
-       const caminhoDestino = path.resolve(destino);
+    const caminhoTexto = path.resolve(texto);
+    const caminhoDestino = path.resolve(destino);
 
-       try {
-        processaArquivo(caminhoTexto, caminhoDestino);
-        console.log('texto processado com sucesso');
-       } catch(erro) {
-        console.log('ocorreu um erro no processamento ', erro);
-       }
-
-     })
+    try {
+      processaArquivo(caminhoTexto, caminhoDestino);
+      console.log(chalk.green('texto processado com sucesso'));
+    } catch (erro) {
+      console.log(chalk.red('ocorreu um erro no processamento'), erro);
+    }
+  })
 
 program.parse();
 
@@ -51,7 +52,7 @@ async function criaESalvaArquivo(listaPalavras, endereco) {
   const textoPalavras = montaSaidaArquivo(listaPalavras);
   try {
     await fs.promises.writeFile(arquivoNovo, textoPalavras);
-    console.log('arquivo criado');
+    console.log(chalk.green('arquivo criado'));
   } catch(erro) {
     throw erro;
   }
