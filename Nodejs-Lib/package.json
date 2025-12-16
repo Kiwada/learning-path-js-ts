@@ -1,0 +1,13 @@
+{
+  "name": "nodejs-lib",
+  "version": "1.0.0",
+  "description": "Este projeto é uma ferramenta de linha de comando (CLI) desenvolvida em Node.js que lê arquivos de texto e analisa a frequência das palavras neles contidas.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
