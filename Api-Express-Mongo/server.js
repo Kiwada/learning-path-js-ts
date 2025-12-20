@@ -1,20 +1,19 @@
-import express from "express";
+import http from "http";    
 
 const PORT = 3000;
-const app = express();
 
-app.get("/", (req, res) => {
-    res.status(200).send("Curso de Express API");
+const rotas = {
+  "/": "Curso de Express API",
+  "/livros": "Entrei na rota livros",
+  "/autores": "Entrei na rota autores"
+};
+
+const server = http.createServer((req, res) => {
+    res.statusCode = 200;
+    res.writeHead(200, { "Content-Type": "text/plain" });
+    res.end(rotas[req.url]);
 });
 
-app.get("/livros", (req, res) => {
-    res.status(200).send("Entrei na rota livros");
-});
-
-app.get("/autores", (req, res) => {
-    res.status(200).send("Entrei na rota autores");
-});
-
-app.listen(PORT, () => {
-    console.log("servidor escutando!");
-});
+server.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}/`);
+})
