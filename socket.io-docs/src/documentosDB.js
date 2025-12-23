@@ -28,4 +28,10 @@ function atualizarDocumento(nome, texto) {
   return atualizacao;
 }
 
-export {obterDocumentos, encontrarDocumento, atualizarDocumento, adicionarDocumento};
+function excluirDocumento(nome) {
+  const resultado = documentosCollection.deleteOne({ nome });
+
+  return resultado;
+}
+
+export {obterDocumentos, encontrarDocumento, atualizarDocumento, adicionarDocumento, excluirDocumento};

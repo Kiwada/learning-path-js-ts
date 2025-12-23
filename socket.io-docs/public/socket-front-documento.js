@@ -1,4 +1,4 @@
-import { atualizaTextoEditor } from "./documento.js";
+import { atualizaTextoEditor, alertareRedirecionar   } from "./documento.js";
 
 
 const socket = io();
