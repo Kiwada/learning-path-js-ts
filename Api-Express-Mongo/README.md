@@ -1,45 +1,67 @@
-# API Express & Mongo (Em Desenvolvimento)
+# API Express & Mongo
 
-> **Nota:** Este projeto documenta a jornada de construção de uma API, começando pelos fundamentos nativos do Node.js.
+API REST simples para cadastro de livros, construída com **Express** e **MongoDB** (via Mongoose). O objetivo é praticar CRUD, validação e estruturação básica de um backend em Node.js.
 
-## 📋 Sobre o Projeto
+## 📚 O que esta API faz
 
-Este repositório demonstra o entendimento prático do funcionamento de servidores web em **Node.js**. Ao invés de iniciar diretamente com frameworks, a implementação atual utiliza puramente o módulo nativo `http`. 
+- CRUD completo de livros em `/livros`
+- Conexão com MongoDB usando `MONGODB_URI`
+- Respostas JSON padronizadas para sucesso e erro
 
-O objetivo desta abordagem é solidificar o conhecimento sobre ciclo de vida de requisições, headers, códigos HTTP e roteamento manual, provendo uma base sólida para a futura implementação com **Express.js** e **MongoDB**.
+## ✅ Requisitos
 
-## 🚀 Funcionalidades Atuais
+- Node.js 18+
+- MongoDB (local ou Atlas)
+- Variáveis de ambiente configuradas
 
-Nesta etapa inicial, a aplicação consiste em um servidor HTTP que:
-- **Gerencia Rotas Manualmente:** Implementa um sistema de roteamento baseado em mapeamento de objetos para URLs (`/`, `/livros`, `/autores`).
-- **Serve Conteúdo Estático:** Retorna respostas textuais com cabeçalhos apropriados (`Content-Type: text/plain`).
-- **Executa sem Frameworks:** Demonstra capacidade de construir serviços backend com zero dependências de runtime (apenas Node.js padrão).
+## 🔧 Como rodar
 
-## 🛠️ Tecnologias Utilizadas
-
-- **JavaScript (ES Modules)**: Utilização de sintaxe moderna do JS.
-- **Node.js (Core Modules)**: Uso do módulo `http`.
-- **Nodemon**: Ferramenta de desenvolvimento para hot-reloading.
-
-## 🔜 Roadmap de Aprendizado
-
-A evolução planejada para este projeto inclui:
-- [ ] Migração de `http` nativo para **Express.js**.
-- [ ] Conexão com banco de dados **MongoDB** (via Mongoose).
-- [ ] Implementação de operações CRUD completas (Create, Read, Update, Delete).
-- [ ] Estruturação em arquitetura MVC (Model-View-Controller).
-
-## 📦 Como Rodar
-
-1. **Instale as dependências:**
+1. Instale as dependências:
    ```bash
    npm install
    ```
-2. **Execute o servidor em modo de desenvolvimento:**
+2. Crie um arquivo `.env` na raiz com:
+   ```bash
+   MONGODB_URI="mongodb+srv://<user>:<password>@<cluster>/<database>"
+   PORT=3000
+   ```
+3. Rode em modo desenvolvimento:
    ```bash
    npm run dev
    ```
-3. O servidor estará rodando em `http://localhost:3000`.
+4. Acesse em `http://localhost:3000`.
 
----
-*Desenvolvido como parte da trilha de especialização em Backend com Node.js.*
+## 📌 Endpoints
+
+### Livros
+
+- `GET /livros` — lista todos os livros
+- `GET /livros/:id` — busca livro por ID
+- `POST /livros` — cria um livro
+- `PUT /livros/:id` — atualiza um livro
+- `DELETE /livros/:id` — remove um livro
+
+### Exemplo de payload
+
+```json
+{
+  "titulo": "Clean Code",
+  "editora": "Prentice Hall",
+  "preco": 99.9,
+  "paginas": 464
+}
+```
+
+## 🗂️ Estrutura
+
+- `server.js` — entrypoint do servidor
+- `src/app.js` — configuração do Express e rotas
+- `src/models/Livros.js` — schema do Mongoose
+- `src/config/dbConnect.js` — conexão com MongoDB
+
+## 🚀 Próximos passos sugeridos
+
+- Middleware centralizado de erros
+- Validação de entrada (Joi/Zod)
+- Paginação e filtros em `/livros`
+- Testes com Jest + Supertest
