@@ -12,17 +12,13 @@ class LivrosController {
 
   static async obterLivroPorId(req, res) {
     try {
-      const livro = await Livros.findById(req.params.id);
-
-      if (!livro) {
-        return res.status(404).json({ message: "Livro não encontrado" });
-      }
-
-      res.status(200).json(livro);
+      const id = req.params.id;
+      const livroEncontrado = await Livros.findById(id);
+      res.status(200).json(livroEncontrado);
     } catch (error) {
-      res.status(400).json({ message: "ID inválido", error: error.message });
+      res.status(500).json({ message: "Erro ao obter livro", error: error.message });
     }
-  }
+  };
 
   static async criarLivro(req, res) {
     try {
